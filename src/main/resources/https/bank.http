@@ -1,0 +1,17 @@
+GET http://localhost:8080/api/v1/bank
+Accept: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxMyIsImlhdCI6MTY0OTE0MTg4MCwiZXhwIjoxNjQ5MTQ1NDgwLCJpc3MiOiJhcGVsc2luIiwicm9sZSI6IlVTRVJfUk9MRSJ9.DAU7-ZXuK1B7l3W6fOmpAVvj52IBmAOmzYPoF9HQvhI
+
+###
+POST http://localhost:8080/api/v1/bank
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxMyIsImlhdCI6MTY0OTE0MTg4MCwiZXhwIjoxNjQ5MTQ1NDgwLCJpc3MiOiJhcGVsc2luIiwicm9sZSI6IlVTRVJfUk9MRSJ9.DAU7-ZXuK1B7l3W6fOmpAVvj52IBmAOmzYPoF9HQvhI
+
+{
+  "name": "Bitcoin bank",
+  "phone": "+998951232514"
+}
+
+
+
+###
