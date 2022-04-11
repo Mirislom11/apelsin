@@ -15,6 +15,7 @@ import com.company.service.ProfileRepositoryService;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -32,15 +33,20 @@ public class BankAccountServiceImpl implements BankAccountService {
     private BankAccountCustomRepository bankAccountCustomRepository;
     @Autowired
     private BankAccountRepositoryService bankAccountRepositoryService;
+    @Autowired
+    private BalanceServiceImpl balanceService;
     @Override
+    @Transactional
     public BankAccountDTO save(BankAccountDTO bankAccountDTO) {
-        log.debug("BankAccountRepository.save {} ", bankAccountDTO);
+        log.debug("saving bank account {} ", bankAccountDTO);
+        if (!Objects.nonNull(bankAccountDTO.getBalanceDTO())) throw new BadRequestException("Balance is null");
         boolean existsAccount = bankAccountRepository.existsByNumber(bankAccountDTO.getAccountNumber());
         if (existsAccount) throw new BadRequestException("Bank by this number exists");
         BankEntity bank = bankRepositoryService.findById(bankAccountDTO.getBankId());
         ProfileEntity profile = profileRepositoryService.findById(bankAccountDTO.getProfileId());
         BankAccountEntity bankAccount = bankAccountDTO.map2Entity(bank,profile);
         bankAccountRepository.save(bankAccount);
+        balanceService.save(bankAccountDTO.getBalanceDTO(), bankAccount);
         return bankAccount.map2DTO();
     }
 
@@ -61,7 +67,7 @@ public class BankAccountServiceImpl implements BankAccountService {
         if (Objects.nonNull(profileId)) {
             profile = profileRepositoryService.findById(profileId);
         }
-        List<BankAccountEntity> bankAccountEntities = bankAccountCustomRepository.findAll(BankAccountStatus.DELETED, bank, profile, cardNumber, password);
+        List<BankAccountEntity> bankAccountEntities = bankAccountCustomRepository.findAll(BankAccountStatus.DELETED, bank, profile, password,cardNumber);
         log.debug("BankAccountServiceImpl.findAll");
         return bankAccountEntities.stream()
                 .map(BankAccountEntity::map2DTO)
@@ -79,7 +85,7 @@ public class BankAccountServiceImpl implements BankAccountService {
         }
         bankAccount.setVersion(bankAccount.getVersion()+1);
         BankAccountEntity response = bankAccountRepository.save(bankAccount);
-        log.debug("BankAccountServiceImpl.update {}", response);
+        log.debug("update account {} ", response);
         return response.map2DTO();
     }
 
@@ -88,7 +94,9 @@ public class BankAccountServiceImpl implements BankAccountService {
         BankAccountEntity bankAccountEntity = bankAccountRepositoryService.findById(id);
         bankAccountEntity.setStatus(BankAccountStatus.DELETED);
         bankAccountEntity.setVersion(bankAccountEntity.getVersion()+1);
-        log.debug("BankAccount.delete by id{}", id);
+        log.debug("delete account by id {} ", id);
+        balanceService.deleteByAccountId(id);
         bankAccountRepository.save(bankAccountEntity);
+
     }
 }

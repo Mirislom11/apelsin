@@ -35,7 +35,7 @@ public class ProfileController {
     @GetMapping("/{id}")
     public ResponseEntity<?> findById(@PathVariable("id") @Valid @Positive long id) {
         log.debug("find profile by id{}", id);
-        ApiResponse<ProfileDTO> response = new ApiResponse<>("Successfully saved", profileServiceImpl.findById(id),
+        ApiResponse<ProfileDTO> response = new ApiResponse<>("successfully found", profileServiceImpl.findById(id),
                 HttpStatus.OK.value());
         return ResponseEntity.ok(response);
     }
@@ -45,13 +45,13 @@ public class ProfileController {
                                      @RequestParam(name = "lastName", required = false) String lastName, @RequestParam(name = "login", required = false)
                                                 String login) {
         log.debug("Find all");
-        ApiResponse<List<ProfileDTO>> listApiResponse = new ApiResponse<>("Successfully find", profileServiceImpl.findAll(name, lastName,login), HttpStatus.OK.value());
+        ApiResponse<List<ProfileDTO>> listApiResponse = new ApiResponse<>("Successfully found all profiles", profileServiceImpl.findAll(name, lastName,login), HttpStatus.OK.value());
         return ResponseEntity.ok(listApiResponse);
     }
 
     @PutMapping
     public ResponseEntity<?> update(@RequestBody ProfileDTO profileDTO, HttpServletRequest request) {
-        log.debug("Updating profile{}", profileDTO);
+        log.debug("update profile {} ", profileDTO);
         ProfileJwtVm profileJwtVm = JwtUtils.getProfile(request);
         ApiResponse<ProfileDTO> apiResponse = new ApiResponse<>("Successfully update", profileServiceImpl.updateById(profileJwtVm.getId(), profileDTO), HttpStatus.OK.value());
         return ResponseEntity.ok(apiResponse);

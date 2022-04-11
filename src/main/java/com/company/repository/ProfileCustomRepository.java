@@ -23,7 +23,11 @@ public class ProfileCustomRepository {
         StringBuilder paramStringBuilder = new StringBuilder("");
 
         if (Objects.nonNull(profileStatus)) {
-            paramStringBuilder.append(" WHERE status <> :status");
+            if(paramStringBuilder.length() > 0) {
+                paramStringBuilder.append(" AND status <> :status");
+            }else {
+                paramStringBuilder.append(" WHERE status <> :status");
+            }
             params.put("status", profileStatus);
         }
 
@@ -43,9 +47,9 @@ public class ProfileCustomRepository {
             params.put("lastName", lastName);
         } if (Objects.nonNull(login)){
             if (paramStringBuilder.length()>0) {
-                stringBuilder.append(" AND login = :login");
+                paramStringBuilder.append(" AND login = :login");
             }else {
-                stringBuilder.append(" WHERE login = :login");
+                paramStringBuilder.append(" WHERE login = :login");
             }
             params.put("login", login);
         }

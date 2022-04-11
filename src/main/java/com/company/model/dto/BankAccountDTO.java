@@ -4,6 +4,7 @@ import com.company.model.domain.BankAccountEntity;
 import com.company.model.domain.BankEntity;
 import com.company.model.domain.profile.ProfileEntity;
 import com.company.model.enums.BankAccountStatus;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -13,6 +14,7 @@ import javax.validation.constraints.Size;
 
 @Getter
 @Setter
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class BankAccountDTO {
     private long id;
     @Size(max = 8, message = "Account number should be maximum 8")
@@ -20,6 +22,8 @@ public class BankAccountDTO {
     @Size(max = 4, message = "Password size should be max 4")
     private String password;
     private BankAccountStatus bankAccountStatus;
+    private BalanceDTO balanceDTO;
+    private Long balanceId;
     @Positive
     private long profileId;
     @Positive

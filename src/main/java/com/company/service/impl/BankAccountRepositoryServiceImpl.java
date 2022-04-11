@@ -24,4 +24,5 @@ public class BankAccountRepositoryServiceImpl implements BankAccountRepositorySe
         log.error("BankAccountRepositoryServiceImpl.findById {} ", id);
         throw new ItemNotFoundException("Bank Account by id not found");
     }
+
 }

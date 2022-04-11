@@ -20,6 +20,8 @@ public class SecuredFilerConfig {
         bean.addUrlPatterns("/api/v1/bank/*");
         bean.addUrlPatterns("/api/v1/profile/*");
         bean.addUrlPatterns("/api/v1/bank-account/*");
+        bean.addUrlPatterns("/api/v1/balance/*");
+        bean.addUrlPatterns("/api/v1/payment/*");
         return bean;
     }
 

@@ -48,7 +48,7 @@ public class BankAccountController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> update(@PathVariable("id") long id, @RequestBody BankAccountDTO bankAccountDTO) {
+    public ResponseEntity<?> update(@PathVariable("id") long id, @RequestBody  BankAccountDTO bankAccountDTO) {
         log.debug("BankAccountController.update {}", bankAccountDTO);
         BankAccountDTO response = bankAccountService.update(id, bankAccountDTO);
         ApiResponse<BankAccountDTO> apiResponse = new ApiResponse<>("Update bank Account", response, HttpStatus.OK.value());

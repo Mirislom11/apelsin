@@ -39,6 +39,7 @@ public class BankAccountEntity extends BaseEntity{
         bankAccountDTO.setCreatedDateTime(DateTimeUtil.LocalDateTimeToString(this.getCreatedDateTime()));
         bankAccountDTO.setLastModifiedDate(DateTimeUtil.LocalDateTimeToString(this.getLastModifiedDate()));
         bankAccountDTO.setVersion(super.getVersion());
+        bankAccountDTO.setBankId(this.getBankEntity().getId());
         return bankAccountDTO;
     }
 }

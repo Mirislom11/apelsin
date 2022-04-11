@@ -1,6 +1,7 @@
 package com.company.exceptions;
 
 import com.company.model.response.ApiResponse;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,6 +14,7 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 
 import java.util.*;
 
+@Log4j2
 @ControllerAdvice
 public class ExceptionHandlerController extends ResponseEntityExceptionHandler {
     @Override
@@ -32,20 +34,24 @@ public class ExceptionHandlerController extends ResponseEntityExceptionHandler {
     @ExceptionHandler({ItemNotFoundException.class})
     public ResponseEntity<?> handleItemNotFoundException(RuntimeException ex) {
         ex.printStackTrace();
+        log.error(ex.getMessage());
         return ResponseEntity.ok(new ApiResponse<>(ex.getMessage(), HttpStatus.BAD_REQUEST.value()));
     }
+
     @ExceptionHandler({ForbiddenException.class})
-    public ResponseEntity<?> handleForbiddenException (RuntimeException e){
+    public ResponseEntity<?> handleForbiddenException(RuntimeException e) {
         e.printStackTrace();
         return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new ApiResponse<>(e.getMessage(), HttpStatus.FORBIDDEN.value()));
     }
+
     @ExceptionHandler({BadRequestException.class})
-    public ResponseEntity<?> handleBadRequestException(RuntimeException e){
+    public ResponseEntity<?> handleBadRequestException(RuntimeException e) {
         e.printStackTrace();
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ApiResponse<>(e.getMessage(), HttpStatus.BAD_REQUEST.value()));
     }
+
     @ExceptionHandler({UnauthorizedException.class})
-    public ResponseEntity<?> handleUnauthorizedException(RuntimeException e){
+    public ResponseEntity<?> handleUnauthorizedException(RuntimeException e) {
         e.printStackTrace();
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new ApiResponse<>(e.getMessage(), HttpStatus.UNAUTHORIZED.value()));
     }

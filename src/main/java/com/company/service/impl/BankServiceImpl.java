@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -45,7 +46,7 @@ public class BankServiceImpl implements BankService {
 
     @Override
     public List<BankDTO> findAll(String name, String phone) {
-        List<BankEntity> bankEntityList = bankCustomRepository.findAll(name, phone);
+        List<BankEntity> bankEntityList = bankCustomRepository.findAll(BankStatus.DELETED, name, phone);
         log.debug("find all bank");
         return bankEntityList.stream()
                 .map(BankEntity::map2DTO)
@@ -59,6 +60,7 @@ public class BankServiceImpl implements BankService {
         BankEntity bank = bankRepositoryServiceImpl.findById(id);
         bank.setPhone(bankDTO.getPhone());
         bank.setName(bankDTO.getName());
+        bank.setLastModifiedDate(LocalDateTime.now());
         bank.setVersion(bank.getVersion() + 1);
         bankRepository.save(bank);
         return bank.map2DTO();
